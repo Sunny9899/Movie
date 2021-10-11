@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie1</title>
+    <style>
+body{
+        background-color: black;
+}
+.searchbox{
+           display: flex;
+           align-items: center;
+           margin:2.5%;
+           justify-content: center;          
+       }
+       .searchbox>input{
+           padding:1%;
+           width: 50%;
+           background-color: white;
+           border:none;
+           outline: none;
+       }
+       .searchbox>button{
+           padding:1% 5%;
+           color: white;
+           font-weight: 600;
+           background-color: red;
+           border:none;
+       }
+       .img{
+           width:80%;
+           height:50%;
+       }
+       #data{
+           color:whitesmoke;
+           width:600px;
+           height:400px;
+           height:auto;
+           justify-self: center;
+           font-size: large;
+           margin-left: 30%;
+       }
+    </style>
+</head>
+<body>
+    <div class="searchbox">
+        <input id="search" type="text" placeholder="What's in your mind today?"/>
+        <button onclick="search()">Search</button>
+    </div>    
+    <div id="data"></div>    
+
+
+    <script>
+
+let parent=document.getElementById("data");
+
+async function search(){
+let input=document.getElementById("search").value;
+
+let res = await fetch(`http://www.omdbapi.com/?apikey=440690ce&t=${input}`);// 1 data at a time , thats why we use ${input} and not using forEach loop
+
+let Data=await res.json();
+console.log(Data);
+if(input===Data.Title){
+    parent.innerHTML=null;
+show(Data);
+}
+}
+
+
+
+function show(movie){
+   // parent.innerHTML=null;
+    let divs=document.createElement("div");
+    divs.setAttribute("class","divs");
+
+    let image=document.createElement("img");
+    image.setAttribute("class","img");
+    image.src=movie.Poster;
+
+    let title=document.createElement("p");
+    title.textContent="Title:- "+movie.Title;
+
+    let relDate=document.createElement("p");
+    relDate.textContent="Release Date:- "+movie.Released;
+
+    let runTime=document.createElement("p");
+    runTime.textContent="RunTime:- "+movie.Runtime;
+
+    let imdb=document.createElement("p");
+    imdb.textContent="IMDB:- "+movie.imdbRating;
+
+    let actors=document.createElement("p");
+    actors.textContent="Starring:- "+movie.Actors;
+
+    let director=document.createElement("p");
+    director.textContent="Directed By:- "+movie.Director;
+
+    let genre=document.createElement("p");
+    genre.textContent="Movie Genre:- "+movie.Genre;
+
+    divs.append(image,title,runTime,genre,imdb,relDate,actors,director);
+    parent.append(divs);
+}
+
+
+
+    </script>
+</body>
+</html>
